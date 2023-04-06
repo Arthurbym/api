@@ -18,7 +18,10 @@ def get_conf():
             mysqldb['password'] = doc.get_conf_value('mysqldb_virtual','password')
             mysqldb['database'] = doc.get_conf_value('mysqldb_virtual','database')
             mysqldb['charset'] = doc.get_conf_value('mysqldb_virtual','charset')
-            return ip,mysqldb
+            headers = {}
+            headers['email'] = doc.get_conf_value('headers', 'email')
+            headers['Content-Type'] = doc.get_conf_value('headers', 'Content-Type')
+            return ip,mysqldb,headers
         except Exception:
             return 'get environment failed!!!'
     elif doc.get_conf_value('environment','env')  == 'real':
@@ -31,13 +34,17 @@ def get_conf():
             mysqldb['password'] = doc.get_conf_value('mysqldb_real','password')
             mysqldb['database'] = doc.get_conf_value('mysqldb_real','database')
             mysqldb['charset'] = doc.get_conf_value('mysqldb_real','charset')
-            return ip,mysqldb
+            headers = {}
+            headers['email'] = doc.get_conf_value('headers', 'email')
+            headers['Content-Type'] = doc.get_conf_value('headers', 'Content-Type')
+            return ip,mysqldb,headers
         except Exception:
             return 'get environment failed!!!'
 
-ip,mysqldb = get_conf()
+ip,mysqldb,headers = get_conf()
 
 env = doc.get_conf_value('environment','env')
+
 
 if __name__ == "__main__":
     print(ip,mysqldb)

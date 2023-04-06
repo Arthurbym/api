@@ -2,6 +2,7 @@ from common.path_data import test_data_Path
 import xlrd, os,json
 from common.log import Logger
 from common.do_md5 import get_md5
+from config.config_data import headers
 log = Logger(__name__).get_logger()
 
 
@@ -148,15 +149,24 @@ class DoExcel(object):
                     rows_value[5] = json.loads(rows_value[5])
                     re = get_md5(rows_value[5][rows_value[4]])
                     rows_value[5][rows_value[4]] = re
-                    api_list.append(rows_value)
                 else:
                     rows_value[5] = json.loads(rows_value[5])
-                    api_list.append(rows_value)
                 # 处理excel，如为整数，float转换int
                 for x in range(len(rows_value)):
                     if isinstance(rows_value[x],float):
                         if int(rows_value[x]) == rows_value[x]:
                             rows_value[x] = int(rows_value[x])
+                # 处理请求头，注意excel请求头格式json{}
+                if rows_value[3]  !='':
+                    headers1 = headers
+                    jl = json.loads(rows_value[3])
+                    jlt = tuple(jl.items())
+                    for i in range(len(jlt)):
+                         headers1[jlt[i][0]] = jlt[i][1]
+                    rows_value[3] =headers1
+
+                api_list.append(rows_value)
+
         except Exception:
             log.exception('get api_list failed!!!')
         else:
