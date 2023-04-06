@@ -24,7 +24,12 @@ class TestApi():
                  after_sql, after_sql_checkout,fix_sql):
         with allure.step('发起接口请求'):
             if before_sql != '':
-                DoSql().change_value(before_sql)
+                if ':' in before_sql:
+                    sql_list = before_sql.split(':')
+                    for i in sql_list:
+                        DoSql().change_value(i)
+                else:
+                    DoSql().change_value(before_sql)
             if api_type == 'get':
                 res = DoRequest().get_url(url=route, headers=headers, params=par).text
             elif api_type == 'post':
@@ -39,7 +44,12 @@ class TestApi():
                 log.info('assert {sql_res} == {after_sql_checkout}'.format(sql_res=sql_res,after_sql_checkout=after_sql_checkout))
                 assert sql_res == after_sql_checkout
             if fix_sql != '':
-                DoSql().change_value(fix_sql)
+                if ':' in fix_sql:
+                    sql_list = fix_sql.split(':')
+                    for i in sql_list:
+                        DoSql().change_value(i)
+                else:
+                    DoSql().change_value(fix_sql)
 
 
 
