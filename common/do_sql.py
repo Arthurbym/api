@@ -28,6 +28,15 @@ class DoSql(object):
         self.db = pymysql.connect(**sql_dc)
         self.cur = self.db.cursor()
 
+    def get_value(self,sql_line):
+        try:
+            sql_data = self.cur.execute(sql_line)
+        except Exception:
+            log.exception("execute sql [%s] failed! " % sql_line)
+        else:
+            log.info("execute sql [%s] succeed!" % sql_line)
+            return sql_data
+
     def select_value(self, sql_line):
         '''
         查询

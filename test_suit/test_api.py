@@ -5,6 +5,9 @@ from common.do_excel import DoExcel
 from common.do_sql import DoSql
 from common.do_request import DoRequest
 import allure, pytest
+from common.log import Logger
+
+log = Logger(__name__).get_logger()
 
 data = DoExcel().get_api_list()
 
@@ -27,4 +30,9 @@ class TestApi():
             elif api_type == 'post':
                 res = DoRequest().post_url(url=route, headers=headers, json=par).text
         with allure.step('校验'):
+            log.info('assert {response_checkout} in {res}'.format(response_checkout=response_checkout,res=res))
             assert response_checkout in res
+            if after_sql_checkout != '':
+                sql_res = DoSql().get_value(after_sql)
+                log.info('assert {sql_res} == {after_sql_checkout}'.format(sql_res=sql_res,after_sql_checkout=after_sql_checkout))
+                assert sql_res == after_sql_checkout

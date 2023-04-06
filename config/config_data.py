@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 #
 from common.do_config import DoConfigIni
-from common.path_data import test_data_apk_path, test_data_app_path
 
 doc = DoConfigIni()
 

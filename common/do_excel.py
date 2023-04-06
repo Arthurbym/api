@@ -142,6 +142,7 @@ class DoExcel(object):
             sheet = self.workbook.sheet_by_name(sheetName)
             rows = sheet.nrows
             for i in range(1,rows):
+                # 处理excel中，par转json格式，及参数转md5
                 rows_value = self.get_sheet_row_values(sheetName,i)
                 if rows_value[4] != '':
                     rows_value[5] = json.loads(rows_value[5])
@@ -151,6 +152,11 @@ class DoExcel(object):
                 else:
                     rows_value[5] = json.loads(rows_value[5])
                     api_list.append(rows_value)
+                # 处理excel，如为整数，float转换int
+                for x in range(len(rows_value)):
+                    if isinstance(rows_value[x],float):
+                        if int(rows_value[x]) == rows_value[x]:
+                            rows_value[x] = int(rows_value[x])
         except Exception:
             log.exception('get api_list failed!!!')
         else:
