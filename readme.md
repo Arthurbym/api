@@ -1,5 +1,5 @@
 # 项目介绍
-利用appium开源工具封装而成的app自动化项目
+利用appium开源工具封装而成的api自动化项目
    
 # 环境配置
 1.[allure2下载地址](https://github.com/allure-framework/allure2/releases)  
