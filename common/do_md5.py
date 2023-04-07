@@ -15,11 +15,27 @@ def get_md5(pws=None):
         md5 = hashlib.md5(pws.encode('UTF-8'))
         return md5.hexdigest()
 
+def get_file_md5(file_name):
+  """
+  计算文件的md5
+  :param file_name:
+  :return:
+  """
+  m = hashlib.md5()  #创建md5对象
+  with open(file_name,'rb') as fobj:
+    while True:
+      data = fobj.read(4096)
+      if not data:
+        break
+      m.update(data) #更新md5对象
+
+  return m.hexdigest()  #返回md5对象
 
 
 if __name__ == '__main__':
-    print(get_md5('sdas'))
-    print(get_md5('sdas'))
-    print(get_md5('sdas'))
-    time.sleep(1)
-    print(get_md5('sdas'))
+    # print(get_md5('sdas'))
+    # print(get_md5('sdas'))
+    # print(get_md5('sdas'))
+    # time.sleep(1)
+    # print(get_md5('sdas'))
+    print(get_file_md5(r'D:\ApiAuto\test_data\api_doc\api_pitpat.xlsx'))

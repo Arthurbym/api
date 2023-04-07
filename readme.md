@@ -18,18 +18,15 @@ run_test.py: 项目运行文件
 gitignore：存放不上传到git上的内容  
 
 
-#注意事项
+#配置文件
+environment: 执行环境
+ip_address_real：真实环境ip地址
+mysqldb_real：真实环境数据库
+ip_address_virtual：虚拟环境ip地址
+mysqldb_virtual：虚拟环境数据库
+headers：通用请求头
 
-#### 切换appium连接配置
-appium连接配置在config/config.ini文件中修改android_ds  
-#### 修改翻译走查的语言
-在config/config.ini文件中修改project中的language，例如要测试日文，
-可修改language为Japanese(elements.xlsx中要有对应的表头，text_Japanese)  
-#### 修改pytest运行时截图规则
-在config/config.ini文件中修改allure中的pic，
-allure报告截图，默认all=失败成功都截图，pass=成功截图，fail=失败截图  
-#### 修改pytest运行系统
-在config/config.ini文件中修改project中的system，system=android或者ios  
+
 
 
 

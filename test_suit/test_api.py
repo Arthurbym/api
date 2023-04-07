@@ -12,10 +12,10 @@ log = Logger(__name__).get_logger()
 data = DoExcel().get_api_list()
 
 
-@allure.epic('登录')
+# @allure.epic('自动化接口测试')
 class TestApi():
-    @allure.feature("登录")
-    @allure.story('冒烟测试')
+    # @allure.feature("登录")
+    # @allure.story('冒烟测试')
     @allure.title('{test_case_name}')
     @pytest.mark.parametrize(
         'test_case_name,route,api_type,headers,md5,par,before_sql,response,response_checkout,after_sql,after_sql_checkout,fix_sql',
@@ -34,8 +34,6 @@ class TestApi():
                 res = DoRequest().get_url(url=route, headers=headers, params=par).text
             elif api_type == 'post':
                 res = DoRequest().post_url(url=route, headers=headers, json=par).text
-            # if after_sql_checkout != '':
-            #     sql_res = DoSql().get_value(after_sql)
         with allure.step('校验'):
             log.info('assert {response_checkout} in {res}'.format(response_checkout=response_checkout,res=res))
             assert response_checkout in res

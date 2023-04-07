@@ -34,7 +34,7 @@ class DoSql(object):
         except Exception:
             log.exception("execute sql [%s] failed! " % sql_line)
         else:
-            log.info("execute sql [%s] succeed!" % sql_line)
+            log.info("execute sql [%s] succeed! value : %s " % (sql_line,sql_data))
             return sql_data
 
     def select_value(self, sql_line):
