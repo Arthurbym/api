@@ -30,10 +30,12 @@ class TestApi():
                         DoSql().change_value(i)
                 else:
                     DoSql().change_value(before_sql)
-            if api_type == 'get':
+            if api_type.upper() == 'GET':
                 res = DoRequest().get_url(url=route, headers=headers, params=par).text
-            elif api_type == 'post':
+            elif api_type.upper() == 'POST':
                 res = DoRequest().post_url(url=route, headers=headers, json=par).text
+            else:
+                log.info('api_type : %s 类型不正确 应为post或者get'%api_type)
         with allure.step('校验'):
             log.info('assert {response_checkout} in {res}'.format(response_checkout=response_checkout,res=res))
             assert response_checkout in res

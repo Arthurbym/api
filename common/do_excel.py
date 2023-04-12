@@ -1,8 +1,9 @@
 from common.path_data import test_data_Path
-import xlrd, os,json
+import xlrd, os, json, xlwt, time
 from common.log import Logger
 from common.do_md5 import get_md5
 from config.config_data import headers
+
 log = Logger(__name__).get_logger()
 
 
@@ -34,7 +35,7 @@ class DoExcel(object):
         '''
         new_values = []
         for i in values:
-            if isinstance(i,str):
+            if isinstance(i, str):
                 i = i.strip()
             new_values.append(i)
         return new_values
@@ -135,45 +136,71 @@ class DoExcel(object):
             log.info("get file %s succeed！" % self.dataFile)
             return self.file_json
 
-
-    def get_api_list(self,sheetName='login'):
+    def get_api_list(self, sheetName='login'):
         # api参数化 返回元组
         try:
             api_list = []
             sheet = self.workbook.sheet_by_name(sheetName)
             rows = sheet.nrows
-            for i in range(1,rows):
+            for i in range(1, rows):
                 # 处理excel中，par转json格式，及参数转md5
-                rows_value = self.get_sheet_row_values(sheetName,i)
+                rows_value = self.get_sheet_row_values(sheetName, i)
                 if rows_value[4] != '':
                     rows_value[5] = json.loads(rows_value[5])
                     re = get_md5(rows_value[5][rows_value[4]])
                     rows_value[5][rows_value[4]] = re
-                else:
+                elif rows_value[5] != '':
                     rows_value[5] = json.loads(rows_value[5])
+                else:
+                    rows_value[5] = {}
                 # 处理excel，如为整数，float转换int
                 for x in range(len(rows_value)):
-                    if isinstance(rows_value[x],float):
+                    if isinstance(rows_value[x], float):
                         if int(rows_value[x]) == rows_value[x]:
                             rows_value[x] = int(rows_value[x])
                 # 处理请求头，注意excel请求头格式json{}
-                if rows_value[3]  !='':
+                if rows_value[3] != '':
                     headers1 = headers
                     jl = json.loads(rows_value[3])
                     jlt = tuple(jl.items())
                     for i in range(len(jlt)):
-                         headers1[jlt[i][0]] = jlt[i][1]
-                    rows_value[3] =headers1
+                        headers1[jlt[i][0]] = jlt[i][1]
+                    rows_value[3] = headers1
 
                 api_list.append(rows_value)
 
         except Exception:
             log.exception('get api_list failed!!!')
         else:
-            log.info('get api_list : %s succeed!!!'%str(api_list))
+            log.info('get api_list : %s succeed!!!' % str(api_list))
             return api_list
 
-
+    def get_api_elements(self):
+        # 处理yapi导出json转excel,生成excel
+        times = time.strftime('%Y-%m-%d-%H-%M-%S')
+        file_new = xlwt.Workbook()
+        with open(r"D:\ApiAuto\test_data\api_doc\api.json", "r", encoding="utf-8") as f:
+            content = json.load(f)
+        for i1 in range(len(content)):
+            i = content[i1]
+            model_name = i['name']
+            table = file_new.add_sheet('%s' % model_name)
+            for x1 in range(len(i['list'])):
+                x = i['list'][x1]
+                query_path = x['query_path']['path']
+                try:
+                    req_body_other = x['req_body_other']
+                except Exception:
+                    req_body_other = ''
+                title = x['title']
+                path = x['path']
+                method = x['method']
+                table.write(x1, 0, query_path)
+                table.write(x1, 1, title)
+                table.write(x1, 2, path)
+                table.write(x1, 3, method)
+                table.write(x1, 4, req_body_other)
+        file_new.save(r'D:\ApiAuto\test_data\api_doc\api_elements%s.xls' % times)
 
 
 if __name__ == "__main__":
@@ -185,3 +212,4 @@ if __name__ == "__main__":
     # print(type(json.loads(file_j['login']['正常登录']['par'])))
     # print(type(file_j['login']['正常登录']['par']))
     print(DoExcel().get_api_list())
+    # print(DoExcel().get_api_elements())
