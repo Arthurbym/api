@@ -16,20 +16,22 @@ data = DoExcel().get_api_list()
 class TestApi():
     # @allure.feature("登录")
     # @allure.story('冒烟测试')
-    @allure.title('{test_case_name}')
+    @allure.title('{test_model}::{test_case_name}')
     @pytest.mark.parametrize(
-        'test_case_name,route,api_type,headers,md5,par,before_sql,response,response_checkout,after_sql,after_sql_checkout,fix_sql',
+        'test_model,test_case_name,route,api_type,headers,md5,par,before_sql,response,response_checkout,after_sql,after_sql_checkout,fix_sql',
         data)
-    def test_api(self, test_case_name, route, api_type, headers, md5, par, before_sql, response, response_checkout,
+    def test_api(self,test_model, test_case_name, route, api_type, headers, md5, par, before_sql, response, response_checkout,
                  after_sql, after_sql_checkout,fix_sql):
         with allure.step('发起接口请求'):
+            # 执行前是否需要执行sql
             if before_sql != '':
-                if ':' in before_sql:
-                    sql_list = before_sql.split(':')
+                if '::' in before_sql:
+                    sql_list = before_sql.split('::')
                     for i in sql_list:
                         DoSql().change_value(i)
                 else:
                     DoSql().change_value(before_sql)
+            # 判断接口类型
             if api_type.upper() == 'GET':
                 res = DoRequest().get_url(url=route, headers=headers, params=par).text
             elif api_type.upper() == 'POST':
@@ -39,13 +41,16 @@ class TestApi():
         with allure.step('校验'):
             log.info('assert {response_checkout} in {res}'.format(response_checkout=response_checkout,res=res))
             assert response_checkout in res
+            # 是否需要sql检查
             if after_sql_checkout != '':
                 sql_res = DoSql().get_value(after_sql)
                 log.info('assert {sql_res} == {after_sql_checkout}'.format(sql_res=sql_res,after_sql_checkout=after_sql_checkout))
                 assert sql_res == after_sql_checkout
+            # 执行结束是否需要执行修复sql
             if fix_sql != '':
-                if ':' in fix_sql:
-                    sql_list = fix_sql.split(':')
+                # 是否存在多条sql需要执行
+                if '::' in fix_sql:
+                    sql_list = fix_sql.split('::')
                     for i in sql_list:
                         DoSql().change_value(i)
                 else:

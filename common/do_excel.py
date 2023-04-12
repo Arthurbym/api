@@ -143,32 +143,53 @@ class DoExcel(object):
             sheet = self.workbook.sheet_by_name(sheetName)
             rows = sheet.nrows
             for i in range(1, rows):
-                # 处理excel中，par转json格式，及参数转md5
+                # 判断用例是否需要执行，默认不需要执行
                 rows_value = self.get_sheet_row_values(sheetName, i)
-                if rows_value[4] != '':
-                    rows_value[5] = json.loads(rows_value[5])
-                    re = get_md5(rows_value[5][rows_value[4]])
-                    rows_value[5][rows_value[4]] = re
-                elif rows_value[5] != '':
-                    rows_value[5] = json.loads(rows_value[5])
+                # if rows_value[0] == 1:
+                #     del rows_value[0]
+                #     is_del = 1
+                # elif rows_value[0] == 0:
+                #     del rows_value[0]
+                #     is_del = 0
+                # elif rows_value[0] == '':
+                #     is_del = 1
+                # else:
+                #     log.exception('is_test 值错误，excel中请填写0，1或者为空')
+                #     is_del = 1
+                if rows_value[0] != 0:
+                    del rows_value[0]
+                    is_del = 1
                 else:
-                    rows_value[5] = {}
+                    del rows_value[0]
+                    is_del = 0
+
+                # 处理excel中，par转json格式，及参数转md5
+                if rows_value[5] != '':
+                    rows_value[6] = json.loads(rows_value[6])
+                    re = get_md5(rows_value[6][rows_value[5]])
+                    rows_value[6][rows_value[5]] = re
+                elif rows_value[6] != '':
+                    rows_value[6] = json.loads(rows_value[6])
+                else:
+                    rows_value[6] = {}
                 # 处理excel，如为整数，float转换int
                 for x in range(len(rows_value)):
                     if isinstance(rows_value[x], float):
                         if int(rows_value[x]) == rows_value[x]:
                             rows_value[x] = int(rows_value[x])
                 # 处理请求头，注意excel请求头格式json{}
-                if rows_value[3] != '':
+                if rows_value[4] != '':
                     headers1 = headers
-                    jl = json.loads(rows_value[3])
+                    jl = json.loads(rows_value[4])
                     jlt = tuple(jl.items())
                     for i in range(len(jlt)):
                         headers1[jlt[i][0]] = jlt[i][1]
-                    rows_value[3] = headers1
+                    rows_value[4] = headers1
 
-                api_list.append(rows_value)
-
+                if is_del == 0:
+                    api_list.append(rows_value)
+                elif is_del == 1:
+                    pass
         except Exception:
             log.exception('get api_list failed!!!')
         else:
