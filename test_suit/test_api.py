@@ -4,7 +4,7 @@ from common.do_request import DoRequest
 from common.do_excel import DoExcel
 from common.do_sql import DoSql
 from common.do_request import DoRequest
-import allure, pytest
+import allure, pytest,time
 from common.log import Logger
 
 log = Logger(__name__).get_logger()
@@ -31,6 +31,7 @@ class TestApi():
                         DoSql().change_value(i)
                 else:
                     DoSql().change_value(before_sql)
+                    time.sleep(1)
             # 判断接口类型
             if api_type.upper() == 'GET':
                 res = DoRequest().get_url(url=route, headers=headers, params=par).text
@@ -43,6 +44,7 @@ class TestApi():
             assert response_checkout in res
             # 是否需要sql检查
             if after_sql_checkout != '':
+                time.sleep(1)
                 sql_res = DoSql().get_value(after_sql)
                 log.info('assert {sql_res} == {after_sql_checkout}'.format(sql_res=sql_res,after_sql_checkout=after_sql_checkout))
                 assert sql_res == after_sql_checkout

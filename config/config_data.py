@@ -21,6 +21,8 @@ def get_conf():
             headers = {}
             headers['email'] = doc.get_conf_value('headers', 'email')
             headers['Content-Type'] = doc.get_conf_value('headers', 'Content-Type')
+            headers['appVersion'] = doc.get_conf_value('headers', 'appVersion')
+            headers['appType'] = doc.get_conf_value('headers', 'appType')
             return ip,mysqldb,headers
         except Exception:
             return 'get environment failed!!!'
@@ -37,6 +39,8 @@ def get_conf():
             headers = {}
             headers['email'] = doc.get_conf_value('headers', 'email')
             headers['Content-Type'] = doc.get_conf_value('headers', 'Content-Type')
+            headers['appVersion'] = doc.get_conf_value('headers', 'appVersion')
+            headers['appType'] = doc.get_conf_value('headers', 'appType')
             return ip,mysqldb,headers
         except Exception:
             return 'get environment failed!!!'
@@ -47,4 +51,5 @@ env = doc.get_conf_value('environment','env')
 
 
 if __name__ == "__main__":
-    print(ip,mysqldb)
+    # print(ip,mysqldb,headers)
+    print(headers)

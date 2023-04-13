@@ -179,13 +179,14 @@ class DoExcel(object):
                             rows_value[x] = int(rows_value[x])
                 # 处理请求头，注意excel请求头格式json{}
                 if rows_value[4] != '':
-                    headers1 = headers
+                    headers1 = headers.copy()
                     jl = json.loads(rows_value[4])
                     jlt = tuple(jl.items())
                     for i in range(len(jlt)):
                         headers1[jlt[i][0]] = jlt[i][1]
                     rows_value[4] = headers1
-
+                else:
+                    rows_value[4]= headers.copy()
                 if is_del == 0:
                     api_list.append(rows_value)
                 elif is_del == 1:
