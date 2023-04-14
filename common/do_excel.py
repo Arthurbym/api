@@ -136,7 +136,7 @@ class DoExcel(object):
             log.info("get file %s succeed！" % self.dataFile)
             return self.file_json
 
-    def get_api_list(self, sheetName='login'):
+    def get_api_list(self, sheetName='api'):
         # api参数化 返回元组
         try:
             api_list = []
