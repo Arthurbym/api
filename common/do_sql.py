@@ -30,12 +30,13 @@ class DoSql(object):
 
     def get_value(self,sql_line):
         try:
-            sql_data = self.cur.execute(sql_line)
+            sql_data = self.beautiful_json(sql_line)
+            value = tuple(sql_data[0].values())[0]
         except Exception:
             log.exception("execute sql [%s] failed! " % sql_line)
         else:
             log.info("execute sql [%s] succeed! value : %s " % (sql_line,sql_data))
-            return sql_data
+            return value
 
     def select_value(self, sql_line):
         '''
@@ -149,6 +150,8 @@ if __name__ == "__main__":
     # DoSql().auto_dosql_team_up1()
     # DoSql()
     # sda= DoSql().beautiful_json('select amount from zns_user_account where user_id = 81085')[0]['amount']
-    sda= float(DoSql().beautiful_json('select amount from zns_user_account where user_id = 81085')[0]['amount'])
-    print(type(sda))
-    print(sda)
+    # sda= float(DoSql().beautiful_json('select amount from zns_user_account where user_id = 81085')[0]['amount'])
+    # print(type(sda))
+    # print(sda)
+    print(DoSql().get_value('select user_state from zns_run_activity_user where id = 1268624'))
+    print(DoSql().beautiful_json('select user_state from zns_run_activity_user where id = 1268624'))

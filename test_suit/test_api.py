@@ -44,7 +44,7 @@ class TestApi():
             assert response_checkout in res
             # 是否需要sql检查
             if after_sql_checkout != '':
-                time.sleep(1)
+                time.sleep(2)
                 sql_res = DoSql().get_value(after_sql)
                 log.info('assert {sql_res} == {after_sql_checkout}'.format(sql_res=sql_res,after_sql_checkout=after_sql_checkout))
                 assert sql_res == after_sql_checkout
