@@ -22,3 +22,4 @@ class TestOther():
             res1 = DoRequest().post_url('/app/mind/cancel/match', json={"userId":343},headers =headers).text
         with allure.step('发起接口请求'):
             assert '"code":"200"' in res1
+
