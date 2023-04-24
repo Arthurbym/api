@@ -9,7 +9,9 @@ from common.do_sql import DoSql
 from common.do_request import DoRequest
 import allure, pytest,time,json
 from common.log import Logger
-from config.config_data import headers
+from config.config_data import headers,get_sign
+from common.do_md5 import get_md5
+
 
 
 log = Logger(__name__).get_logger()
@@ -27,3 +29,14 @@ class TestOther():
         with allure.step('发起接口请求'):
             assert '"code":"200"' in res1
 
+    # def test_home(self):
+    #     headers1=headers.copy()
+    #     headers1['sign']= get_md5(get_sign(headers))
+    #     headers1['Content-Type'] = 'application/json'
+    #     print(headers1)
+    #     res = DoRequest().post_url('/app/user/loginNew',json={"emailAddress":"mtbsw2@126.com","password":get_md5('Mtbsw54321')},headers=headers1).text
+    #     print(res)
+
+
+if __name__ == '__main__':
+    TestOther().test_home()

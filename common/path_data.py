@@ -3,7 +3,7 @@ import os
 # 把当前文件所在文件夹的父文件夹路径加入到PYTHONPATH
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import os, time,sys,platform
-
+import ctypes
 
 # 当前时间
 current_time = time.strftime('%Y-%m-%d')
