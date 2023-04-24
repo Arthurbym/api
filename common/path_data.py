@@ -2,7 +2,8 @@ import sys
 import os
 # 把当前文件所在文件夹的父文件夹路径加入到PYTHONPATH
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import os, time,sys
+import os, time,sys,platform
+
 
 # 当前时间
 current_time = time.strftime('%Y-%m-%d')
@@ -10,7 +11,13 @@ real_current_time =time.strftime('%Y-%m-%d-%H-%M-%S')
 # 获取当前文件绝对路径
 abs_path = os.path.abspath(__file__)
 # 获取项目根目录路径
-pro_path = str(abs_path).split("common\path_data.py")[0]
+sys_pla = platform.system()
+if sys_pla == "Windows":
+    pro_path = str(abs_path).split("common\path_data.py")[0]
+elif sys_pla == "Linux":
+    pro_path = str(abs_path).split("common/path_data.py")[0]
+else:
+    pro_path = str(abs_path).split("common\path_data.py")[0]
 # 配置文件存放路径
 config_path = os.path.join(pro_path, 'config')
 # 拼接日志文件路径
@@ -88,4 +95,7 @@ if __name__ == '__main__':
     print(allure_data_path)
     print(allure_report_path)
     print(str(time.time()).split('.')[0])
+    print(config_path)
+    print(pro_path)
+    print(abs_path)
 

@@ -20,7 +20,8 @@ class DoConfigIni(object):
         '''
         self.cf = MyConfigParser()
         self.filename = filename
-        self.config_file_path = config_path + '\\' + filename
+        self.config_file_path = os.path.join(config_path,filename)
+        print(self.config_file_path)
 
     def get_conf_section_json(self, section):
         '''
@@ -84,4 +85,4 @@ class DoConfigIni(object):
 
 
 if __name__ == "__main__":
-    pass
+    print(DoConfigIni().get_conf_value('environment','env'))

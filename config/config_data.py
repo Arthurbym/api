@@ -57,3 +57,4 @@ env = doc.get_conf_value('environment','env')
 if __name__ == "__main__":
     # print(ip,mysqldb,headers)
     print(headers)
+    print(env)
