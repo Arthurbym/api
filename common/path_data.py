@@ -93,6 +93,7 @@ funcName = sys._getframe().f_code.co_name
 # funcFile = sys._getframe().f_code.co_filename
 if __name__ == '__main__':
     print(allure_data_path)
+    print(test_suit_path, allure_data_path,allure_report_path)
     print(allure_report_path)
     print(str(time.time()).split('.')[0])
     print(config_path)

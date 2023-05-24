@@ -33,11 +33,6 @@ class AES_ENCRYPT(object):
 
 
 if __name__ == '__main__':
-    aes_encrypt = AES_ENCRYPT()
-    my_email = "mtbsw4@126.com"
-    e = aes_encrypt.encrypt(my_email)
-    d = aes_encrypt.decrypt(e)
-    print(my_email)
-    print(e)
-    print(d)
-
+    headers = {'appType': '2', 'appVersion': '206', 'email': 'mtbsw2@126.com', 'time': '1684492860000', 'uuid': 'dbc91fbd0bc5407da62264428b70c16e', 'token': 'tOiInV19rWAKpOtK2i7J868', 'sign': 'b70d4cb707ef160841ddc75f03eb2095'}
+    headers = {'token': 'tO8'}
+    print(str(headers['token'])[0:16])

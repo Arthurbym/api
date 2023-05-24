@@ -1,5 +1,6 @@
 import sys
 import os
+
 # 把当前文件所在文件夹的父文件夹路径加入到PYTHONPATH
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -7,11 +8,25 @@ from common.path_data import test_data_Path
 from common.log import Logger
 from common.do_md5 import get_md5
 from config.config_data import headers
-import xlrd, os, json, xlwt, time,sys
-
-
+import xlrd, os, json, xlwt, time, sys
+from common.do_yaml import DoYaml
+from common.do_request import DoRequest
+from common.do_sign import get_sign
+from common.do_aes import get_aes
 
 log = Logger(__name__).get_logger()
+
+user_token = DoYaml()._read_yamls()['test_user_data']
+
+
+def get_token_to_yaml():
+    user_token1 = user_token.copy()
+    for i in user_token:
+        email = user_token1[i]['email']
+        password = user_token1[i]['password']
+        token = DoRequest().get_token(email, password)
+        user_token1[i]['token'] = token
+    DoYaml().write_yaml(user_token1, 'test_user_data')
 
 
 class DoExcel(object):
@@ -144,6 +159,10 @@ class DoExcel(object):
             return self.file_json
 
     def get_api_list(self, sheetName='api'):
+        # 获取账号token，查看test_user_data.yaml
+        get_token_to_yaml()
+        time.sleep(1)
+        yaml = DoYaml()._read_yamls()['test_user_data']
         # api参数化 返回元组
         try:
             api_list = []
@@ -186,14 +205,31 @@ class DoExcel(object):
                             rows_value[x] = int(rows_value[x])
                 # 处理请求头，注意excel请求头格式json{}
                 if rows_value[4] != '':
+                    # 必须copy
                     headers1 = headers.copy()
                     jl = json.loads(rows_value[4])
                     jlt = tuple(jl.items())
+                    # 循环原header参数，找到email，并尝试获取token
                     for i in range(len(jlt)):
+                        # 判断如果邮箱需要传参，则获取token
+                        if jlt[i][0] == 'email':
+                            # 更新对应的用户的token
+                            for x in yaml:
+                                try:
+                                    if jlt[i][1] == yaml[x]['email']:
+
+                                        headers1['token'] = yaml[x]['token']
+                                except  Exception:
+                                    pass
+                        # 更新对应的用户邮箱
                         headers1[jlt[i][0]] = jlt[i][1]
+                    headers1['sign'] = get_sign(headers1)
+                    # 有邮箱时对eamil进行aes加密
+                    if rows_value[4] != '':
+                        headers1['email'] = get_aes(headers1['email'],str(headers1['token'])[0:16])
                     rows_value[4] = headers1
                 else:
-                    rows_value[4]= headers.copy()
+                    rows_value[4] = headers.copy()
                 if is_del == 0:
                     api_list.append(rows_value)
                 elif is_del == 1:
@@ -241,4 +277,5 @@ if __name__ == "__main__":
     # print(type(json.loads(file_j['login']['正常登录']['par'])))
     # print(type(file_j['login']['正常登录']['par']))
     print(DoExcel().get_api_list())
+    # get_token_to_yaml()
     # print(DoExcel().get_api_elements())

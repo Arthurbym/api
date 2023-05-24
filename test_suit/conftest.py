@@ -79,7 +79,7 @@ def pytest_sessionfinish(session):
     os.popen('allure generate %s -o %s --clean' % (allure_data_path, allure_report_path))
     log.info('generate allure report succeed!')
 
-
+# allure generate D:\api\report\allure\allure2023-05-23-23-00-31\allure_data -o D:\api\report\allure\allure2023-05-23-23-00-31\allure_report --clean
 # @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 # def pytest_runtest_makereport(item):
 #     '''

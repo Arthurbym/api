@@ -9,14 +9,12 @@ from common.do_sql import DoSql
 from common.do_request import DoRequest
 import allure, pytest,time,json
 from common.log import Logger
-from config.config_data import headers,get_sign
+from config.config_data import headers
 from common.do_md5 import get_md5
-
-
 
 log = Logger(__name__).get_logger()
 
-data = DoExcel().get_api_list()
+# data = DoExcel().get_api_list()
 
 # @allure.epic('自动化接口测试')
 class TestOther():

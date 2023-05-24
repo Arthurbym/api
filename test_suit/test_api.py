@@ -4,12 +4,13 @@ import sys
 import os
 # 把当前文件所在文件夹的父文件夹路径加入到PYTHONPATH
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from common.do_request import DoRequest
 from common.do_excel import DoExcel
 from common.do_sql import DoSql
 from common.do_request import DoRequest
 import allure, pytest,time
 from common.log import Logger
+from common.do_aes import get_aes,aes_decrypt
+import json
 
 log = Logger(__name__).get_logger()
 
@@ -28,6 +29,7 @@ class TestApi():
                  after_sql, after_sql_checkout,fix_sql):
         with allure.step('发起接口请求'):
             # 执行前是否需要执行sql
+            log.info('headers:%s'%str(headers))
             if before_sql != '':
                 if '::' in before_sql:
                     sql_list = before_sql.split('::')
@@ -36,12 +38,21 @@ class TestApi():
                 else:
                     DoSql().change_value(before_sql)
             # 判断接口类型
+            # 取token前16位，对请求头参数进行加密
+            token = str(headers['token'])[0:16]
+            par = get_aes(json.dumps(par),token)
+            par1 = {}
+            par1['data']  = par
             if api_type.upper() == 'GET':
-                res = DoRequest().get_url(url=route, headers=headers, params=par).text
+                res = DoRequest().get_url(url=route, headers=headers, params=par1).text
             elif api_type.upper() == 'POST':
-                res = DoRequest().post_url(url=route, headers=headers, json=par).text
+                res = DoRequest().post_url(url=route, headers=headers, json=par1).text
             else:
                 log.info('api_type : %s 类型不正确 应为post或者get'%api_type)
+            # res_data = json.loads(repspone)['data']
+            # res = aes_decrypt(res_data,token)
+            # res_json = json.loads(res_aes)
+            # token = res_json['token']
         with allure.step('校验'):
             log.info('assert {response_checkout} in {res}'.format(response_checkout=response_checkout,res=res))
             assert response_checkout in res

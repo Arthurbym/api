@@ -83,7 +83,7 @@ class DoYaml():
             log.info('read yaml file list from path:%s failed!' % test_data_yaml_path)
             raise e
         else:
-            log.info('read yaml file list from path:%s failed!' % test_data_yaml_path)
+            log.info('read yaml file list from path:%s succeed!' % test_data_yaml_path)
             return yaml_file_list
 
     def _read_yamls(self):
@@ -100,7 +100,14 @@ class DoYaml():
             log.info('read all yaml data from path :%s succeed! '%test_data_yaml_path)
             return now_yaml_file_json
 
+    def write_yaml(self,r,yaml_name):
+        yaml_path = self.default_yaml_path + '\\' + yaml_name+'.yaml'
+        print(yaml_path)
+        with open(yaml_path, "w", encoding="utf-8") as f:
+            yaml.dump(r, f)
+
 
 if __name__ == "__main__":
-    dsd = DoYaml()._read_yamls()['test_login_page']
-    print(dsd)
+    user_token = DoYaml()._read_yamls()['test_user_data']
+    DoYaml().write_yaml({'need_token_user1': {'email': 'mtbsw4@126.com', 'password': 'Mtbsw54321','token':'sadasfasf'}, 'need_token_user2': {'email': 'mtbsw2@126.com', 'password': 'Mtbsw54321'}},'test_user_data')
+    print(user_token)

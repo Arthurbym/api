@@ -42,4 +42,5 @@ if __name__ == '__main__':
     # print(get_md5('sdas'))
     # time.sleep(1)
     # print(get_md5('sdas'))
-    print(get_file_md5(r'D:\ApiAuto\test_data\api_doc\api_pitpat.xlsx'))
+    # print(get_file_md5(r'D:\ApiAuto\test_data\api_doc\api_pitpat.xlsx'))
+    print(get_md5('mtbsw2@126.com'))
