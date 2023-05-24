@@ -7,6 +7,7 @@ main.py
 /test_data/app/*.ipa
 /.pytest_cache
 /__pycache__
+/pages
 /test_data/api_doc/*.json
 /test_data/api_doc/api_elements*
 *.mdb
