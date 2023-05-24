@@ -1,4 +1,3 @@
-/report/allure/*
 /report/log/*
 /venv
 main.py
@@ -23,8 +22,8 @@ main.py
 *.gz
 *.iso
 *.jar
-*.rar
 *.tar
+*.rar
 *.zip
 *.via
 *.tmp
@@ -32,3 +31,5 @@ main.py
 *.log
 *.iml
 /.idea
+/report/allure/*
+!allure.rar
