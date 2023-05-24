@@ -5,6 +5,8 @@ main.py
 /test_data/apk/*.apk
 /test_data/app/*.ipa
 /.pytest_cache
+**/__pycache__/*
+**/__pycache__/
 /__pycache__
 /pages
 /test_data/api_doc/*.json
