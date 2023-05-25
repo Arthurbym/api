@@ -24,6 +24,7 @@ class DoYaml():
         '''
         if yaml_name.endswith('.yaml'):
             yaml_path = self.default_yaml_path + '\\' + yaml_name
+            yaml_path = os.path.join(self.default_yaml_path,yaml_name)
         else:
             # 文件路径如test_data.test_login_page
             try:
@@ -31,9 +32,11 @@ class DoYaml():
                 new_name = yaml_name.split('.')[1]
             # 文件名称如test_login_page
             except Exception:
-                yaml_path = self.default_yaml_path + '\\' + yaml_name + '.yaml'
+                # yaml_path = self.default_yaml_path + '\\' + yaml_name + '.yaml'
+                yaml_path = os.path.join(self.default_yaml_path, yaml_name+'.yaml')
             else:
-                yaml_path = self.default_yaml_path + '\\' + new_name + '.yaml'
+                # yaml_path = self.default_yaml_path + '\\' + new_name + '.yaml'
+                yaml_path=os.path.join(self.default_yaml_path, new_name+'.yaml')
         with open(yaml_path, 'r', encoding='gbk') as file:
             yaml_file_json = yaml.safe_load(file)
         return yaml_file_json
@@ -102,12 +105,12 @@ class DoYaml():
 
     def write_yaml(self,r,yaml_name):
         yaml_path = self.default_yaml_path + '\\' + yaml_name+'.yaml'
-        print(yaml_path)
+        yaml_path = os.path.join(self.default_yaml_path, yaml_name + '.yaml')
         with open(yaml_path, "w", encoding="utf-8") as f:
             yaml.dump(r, f)
 
 
 if __name__ == "__main__":
     user_token = DoYaml()._read_yamls()['test_user_data']
-    DoYaml().write_yaml({'need_token_user1': {'email': 'mtbsw4@126.com', 'password': 'Mtbsw54321','token':'sadasfasf'}, 'need_token_user2': {'email': 'mtbsw2@126.com', 'password': 'Mtbsw54321'}},'test_user_data')
+    # DoYaml().write_yaml({'need_token_user1': {'email': 'mtbsw4@126.com', 'password': 'Mtbsw54321','token':'sadasfasf'}, 'need_token_user2': {'email': 'mtbsw2@126.com', 'password': 'Mtbsw54321'}},'test_user_data')
     print(user_token)
