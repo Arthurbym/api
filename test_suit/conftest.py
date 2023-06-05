@@ -62,16 +62,21 @@ log = Logger(__name__).get_logger()
 # 生成environment.propertie文件，需要放到alure
 def pytest_sessionfinish(session):
     if env == 'virtual':
-        with open("{}\\report\\allure\\allure{}\\allure_data\\environment.properties".format(session.config.rootdir,
-                                                                                             real_current_time),
-                  "w")as f:
+        # with open("{}\\report\\allure\\allure{}\\allure_data\\environment.properties".format(session.config.rootdir,
+        #                                                                                      real_current_time),
+        #           "w")as f:
+        pwd1 = os.path.join(session.config.rootdir,'report','allure','allure%s'%real_current_time,'allure_data','environment.properties')
+        with open(pwd1,'w') as f:
             f.write(
                 "ip={ip}".format(ip=ip))
             f.close()
     elif env == 'real':
-        with open("{}\\report\\allure\\allure{}\\allure_data\\environment.properties".format(session.config.rootdir,
-                                                                                             real_current_time),
-                  "w")as f:
+        # with open("{}\\report\\allure\\allure{}\\allure_data\\environment.properties".format(session.config.rootdir,
+        #                                                                                      real_current_time),
+        #           "w")as f:
+        with open(
+                os.path.join(session.config.rootdir, 'report', 'allure', 'allure%s' % real_current_time, 'allure_data',
+                             'environment.properties'),'w') as f:
             f.write(
                  "ip={ip}".format(ip=ip))
             f.close()
@@ -92,7 +97,7 @@ def pytest_sessionfinish(session):
         },
         "at": {
             "atMobiles": [
-                "15757181215"
+                "15757181215" #指定@某人，放手机号
             ],
             "isAtAll": False  # 这个参数为true好像是@所有人的意思
         }}
