@@ -6,6 +6,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from common.path_data import allure_data_path, allure_report_path, real_current_time
 from common.log import Logger
 from config.config_data import *
+from common.do_request import post_dd,get_external_ip
+
 
 log = Logger(__name__).get_logger()
 
@@ -75,9 +77,29 @@ def pytest_sessionfinish(session):
             f.close()
     else:
         raise Exception('system are not allow!')
-
     os.popen('allure generate %s -o %s --clean' % (allure_data_path, allure_report_path))
+    os.popen('allure serve -h 0.0.0.0 -p 8889 %s' % (allure_report_path))
     log.info('generate allure report succeed!')
+    ext_ip = get_external_ip()
+    url = 'https://oapi.dingtalk.com/robot/send?access_token=e5dd775c201411bd5136c77e2dbc8d34f3c45a2863b7f82a62acd44d6fc47032'
+    body = {
+        "msgtype": "text",
+        "title": "api测试",
+        "text": {
+            "content": "自动化api测试已完成" + "\n" + "网址路径:" + "http://%s:8889"%ext_ip
+        },
+        "at": {
+            "atMobiles": [
+                "15757181215"
+            ],
+            "isAtAll": False  # 这个参数为true好像是@所有人的意思
+        }}
+    header = {
+        "Content-Type": "application/json",
+        "Charset": "UTF-8"
+    }
+    post_dd(url, body, header)
+
 
 # allure generate D:\api\report\allure\allure2023-05-23-23-00-31\allure_data -o D:\api\report\allure\allure2023-05-23-23-00-31\allure_report --clean
 # @pytest.hookimpl(tryfirst=True, hookwrapper=True)

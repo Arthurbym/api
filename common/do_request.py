@@ -67,7 +67,38 @@ class DoRequest():
         except  Exception:
             log.exception('can not get token!!!')
 
+def post_dd(url,body,header):
+    res = requests.post(url,json=body,headers=header).text
+    print(res)
+
+
+def get_external_ip():
+    try:
+        ip = requests.get('https://ident.me').text.strip()
+        return ip
+    except:
+        return None
+
 
 
 if __name__ == '__main__':
-    DoRequest().get_token("mtbsw1@126.com",'Mtbsw54321')
+    # DoRequest().get_token("mtbsw1@126.com",'Mtbsw54321')
+    # url = 'https://oapi.dingtalk.com/robot/send?access_token=e5dd775c201411bd5136c77e2dbc8d34f3c45a2863b7f82a62acd44d6fc47032'
+    # body = {
+    # "msgtype": "text",
+    # "title":"api测试",
+    # "text": {
+    #     "content":"api测试"+"\n"+"总用例数:"+"122" +"\n"+"总通过用例数:"+"122" + "\n"+"总通过率:"+"100%"
+    # },
+    # "at": {
+    #     "atMobiles": [
+    #         "15757181215"
+    #     ],
+    #     "isAtAll":False #这个参数为true好像是@所有人的意思
+    # }}
+    # header = {
+    #     "Content-Type": "application/json",
+    #     "Charset": "UTF-8"
+    # }
+    # post_dd(url,body,header)
+    print(get_external_ip())
