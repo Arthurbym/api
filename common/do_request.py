@@ -80,6 +80,22 @@ def get_external_ip():
         return None
 
 
+import os,sys
+def free_port(port):
+    with os.popen('lsof -i:'+str(port)) as res:
+        res = res.read().split('\n')
+    result = []
+    for line in res:
+        temp = [i for i in line.split(' ') if i != '']
+        if len(temp) > 4:
+            result.append({'pid': temp[1], 'comand': temp[0], 'user': temp[2],'nmae':temp[8]})
+    # print("占用{}端口的进程如下:".format(port))
+    # print(result)
+    if len(result)>1:
+        for i in range(1,len(result)): # 每个line都是一个字典
+            pid=result[i]['pid']
+            result = os.popen("kill -9 "+str(pid))
+            print("杀死占用{}的进程号{},成功".format(port,pid))
 
 if __name__ == '__main__':
     # DoRequest().get_token("mtbsw1@126.com",'Mtbsw54321')

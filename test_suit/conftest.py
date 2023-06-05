@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from common.path_data import allure_data_path, allure_report_path, real_current_time
 from common.log import Logger
 from config.config_data import *
-from common.do_request import post_dd,get_external_ip
+from common.do_request import post_dd,get_external_ip,free_port
 
 
 log = Logger(__name__).get_logger()
@@ -78,7 +78,8 @@ def pytest_sessionfinish(session):
     else:
         raise Exception('system are not allow!')
     os.popen('allure generate %s -o %s --clean' % (allure_data_path, allure_report_path))
-    os.popen('allure serve -h 0.0.0.0 -p 8889 %s' % (allure_report_path))
+    free_port(8889)
+    os.system('allure serve -h 0.0.0.0 -p 8889 %s' % (allure_report_path))
     log.info('generate allure report succeed!')
     ext_ip = get_external_ip()
     url = 'https://oapi.dingtalk.com/robot/send?access_token=e5dd775c201411bd5136c77e2dbc8d34f3c45a2863b7f82a62acd44d6fc47032'
