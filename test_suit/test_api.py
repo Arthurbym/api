@@ -52,6 +52,14 @@ class TestApi():
                 res = DoRequest().post_url(url=route, headers=headers, json=par1).text
             else:
                 log.info('api_type : %s 类型不正确 应为post或者get'%api_type)
+            res = json.loads(res)
+            # 处理加密
+            try:
+                data_de = aes_decrypt(res['data'],token)
+                res['data'] = data_de
+            except Exception:
+                pass
+            res = json.dumps(res)
             # res_data = json.loads(repspone)['data']
             # res = aes_decrypt(res_data,token)
             # res_json = json.loads(res_aes)
