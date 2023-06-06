@@ -229,7 +229,10 @@ class DoExcel(object):
                         headers1['email'] = get_aes(headers1['email'],str(headers1['token'])[0:16])
                     rows_value[4] = headers1
                 else:
-                    rows_value[4] = headers.copy()
+                    #不需要登录时，获取没有token的验签并加入到请求头
+                    headers2 = headers.copy()
+                    headers2['sign'] = get_sign(headers2)
+                    rows_value[4] = headers2
                 if is_del == 0:
                     api_list.append(rows_value)
                 elif is_del == 1:

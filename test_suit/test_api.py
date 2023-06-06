@@ -40,6 +40,9 @@ class TestApi():
             # 判断接口类型
             # 取token前16位，对请求头参数进行加密
             token = str(headers['token'])[0:16]
+            if token == '':
+                token = '0123456789012345'
+            #原请求参数，进行加密，再放入新的字典中，作为data值传输
             par = get_aes(json.dumps(par),token)
             par1 = {}
             par1['data']  = par

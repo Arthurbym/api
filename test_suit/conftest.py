@@ -83,9 +83,10 @@ def pytest_sessionfinish(session):
     else:
         raise Exception('system are not allow!')
     os.popen('allure generate %s -o %s --clean' % (allure_data_path, allure_report_path))
-    free_port(8889)
-    time.sleep(60)
-    os.popen('allure open -h 0.0.0.0 -p 8889 %s' % (allure_report_path))
+    if sys.platform != 'win32':
+        free_port(8889)
+        time.sleep(60)
+        os.popen('allure open -h 0.0.0.0 -p 8889 %s' % (allure_report_path))
     log.info('generate allure report succeed!')
     ext_ip = get_external_ip()
     url = 'https://oapi.dingtalk.com/robot/send?access_token=e5dd775c201411bd5136c77e2dbc8d34f3c45a2863b7f82a62acd44d6fc47032'
